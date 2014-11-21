@@ -1,4 +1,4 @@
-#interlace-stego
+#hyde
 
 A fun little python project for hiding files in images.
 
@@ -10,3 +10,5 @@ A fun little python project for hiding files in images.
 * compressing files before storing them
 * support for more than just pngs
 * web interface (maybe through django)
+* storing multiple files
+* storing across multiple images
