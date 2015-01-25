@@ -2,9 +2,17 @@
 
 A fun little python project for hiding files in images.
 
-## Definitely planned features
-* hiding files in the lsbs of images
-* recognizing files that have images hidden in this way and unhiding them
+Hiding files example:
+
+```
+hyde.py Tricoloring.png secret_message.txt
+```
+
+Unhiding files example:
+
+```
+jekyll.py Tricoloring-secret.png
+```
 
 ## Possibly planned features
 * compressing files before storing them
