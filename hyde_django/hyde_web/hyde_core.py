@@ -1,6 +1,6 @@
 import sys
 import png
-import png_image
+from . import png_image
 
 def ragequit(message):
     print(message)
@@ -19,11 +19,10 @@ def build_header(filename, file_data):
     header_body = chr(len(filename)) + filename + filesize_info
     return '!?!' + header_body + '!?!'
 
-def hyde(hidefilename, hiddenfilename, outfile):
-    hide_image = png_image.read_from_file(hidefilename)
+def hyde(hidefile, hiddenfilename, hidden_file, outfile):
+    hide_image = png_image.read_from_file(hidefile)
     data_size = hide_image.width * hide_image.height
 
-    hidden_file = open(hiddenfilename)
     file_data = hidden_file.read()
     header_data = build_header(hiddenfilename, file_data)
 
@@ -33,7 +32,9 @@ def hyde(hidefilename, hiddenfilename, outfile):
         ragequit("Image not large enough!")
 
     for char in store_bytes:
-        hide_image.store_next_byte(ord(char))
+        if isinstance(char, str):
+            char = ord(char)
+        hide_image.store_next_byte(char)
 
     writer = png.Writer(width=hide_image.width, height=hide_image.height)
 
@@ -48,9 +49,6 @@ def read_bytes(image, n_bytes):
 
 
 def jekyll(filename, outfile=None):
-
-    if filename[-4:] != '.png':
-        ragequit('For now, I can only unhide things from .png files.')
     hiding_file = png_image.read_from_file(filename)
 
     if read_bytes(hiding_file, 3) != '!?!':
@@ -69,4 +67,7 @@ def jekyll(filename, outfile=None):
 
     if outfile is None:
         outfile = open(filename, 'wb')
-    outfile.write(bytes(file_contents, 'UTF-8'))
+        outfile.write(bytes(file_contents, 'UTF-8'))
+        outfile.close()
+    else:
+        outfile.write(file_contents)
