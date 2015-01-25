@@ -2,14 +2,11 @@
 
 import sys
 import png
+import png_image
 
 def ragequit(message):
     print(message)
     sys.exit(0)
-
-def read_image(infile):
-    reader = png.Reader(filename=infile)
-    return PngImage(*reader.read())
 
 #header format: !?! <filename length> filename <file length> !?!
 def build_header(filename, file_data):
@@ -24,41 +21,13 @@ def build_header(filename, file_data):
     header_body = chr(len(filename)) + filename + filesize_info
     return '!?!' + header_body + '!?!'
 
-class PngImage:
-    "a simple wrapper around the data returned by the PyPng library"
-
-    def __init__(self, width, height, pixels, metadata):
-        self.width = width
-        self.height = height
-        self.pixels = list(pixels)
-        self.metadata = metadata
-        self.next_x = 0
-        self.next_y = 0
-
-    def store_next_byte(self, byte):
-        self.store_byte_in_pixel(byte, self.next_x, self.next_y)
-        self.next_x += 1
-        if self.next_x == self.width:
-            self.next_x = 0
-            self.next_y += 1
-
-    def store_byte_in_pixel(self, byte, x, y):
-        r_index = x * (3 if self.metadata['alpha'] else 3)
-        self.pixels[y][r_index] = (self.pixels[y][r_index] & 0b11111000) | (
-                byte >> 5)
-        self.pixels[y][r_index + 1] = (self.pixels[y][r_index + 1] & 0b11111000) | (
-                byte >> 2 & 0b111)
-        self.pixels[y][r_index + 2] = (self.pixels[y][r_index + 2] & 0b11111100) | (
-                byte & 0b11)
-        
-
 if len(sys.argv) != 3:
     ragequit('USAGE: hyde.py <imagetohidein> <filetohide>')
 
 if sys.argv[1][-4:] != '.png':
     ragequit('For now, I can only hide things in .png files.')
 
-hide_image = read_image(sys.argv[1])
+hide_image = png_image.read_from_file(sys.argv[1])
 data_size = hide_image.width * hide_image.height
 
 
