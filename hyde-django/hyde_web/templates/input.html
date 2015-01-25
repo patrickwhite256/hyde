@@ -4,16 +4,34 @@
 <title>Hyde</title>
 <link rel="stylesheet" href="{% static 'hyde_web/css/bootstrap.min.css' %}" />
 </head>
-<body>
+<body class="col-sm-12">
+{% if warning %}
+    <div class="alert alert-warning" role="alert">{{ warning }}</div>
+{% endif %}
 <h1>Hyde</h1>
-<form>
-    <div>
-        Upload a png to hide your file in: <input type="file" name="hidefile">
+<form method="post" class="col-sm-12" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="col-sm-12">
+        <span class="col-sm-3">Upload a png to hide your file in:</span>
+        <span class="col-sm-3"><input type="file" name="hidefile"></span>
     </div>
-    <div>
-        Upload a file to hide: <input type="file" name="hiddenfile">
+    <div class="col-sm-12">
+        <span class="col-sm-3">Upload a file to hide:</span>
+        <span class="col-sm-3"><input type="file" name="hiddenfile"></span>
     </div>
-    <div>
+    <div class="col-sm-12">
+        <input type="submit" value="submit">
+    </div>
+</form>
+or...
+<h1>Jekyll</h1>
+<form method="post" class="col-sm-12" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="col-sm-12">
+        <span class="col-sm-3">Upload a png you think contains a hidden file:</span>
+        <span class="col-sm-3"><input type="file" name="jekfile"></span>
+    </div>
+    <div class="col-sm-12">
         <input type="submit" value="submit">
     </div>
 </form>
