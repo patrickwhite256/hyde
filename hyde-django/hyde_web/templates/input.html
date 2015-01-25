@@ -1,8 +1,21 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <head>
 <title>Hyde</title>
+<link rel="stylesheet" href="{% static 'hyde_web/css/bootstrap.min.css' %}" />
 </head>
 <body>
 <h1>Hyde</h1>
+<form>
+    <div>
+        Upload a png to hide your file in: <input type="file" name="hidefile">
+    </div>
+    <div>
+        Upload a file to hide: <input type="file" name="hiddenfile">
+    </div>
+    <div>
+        <input type="submit" value="submit">
+    </div>
+</form>
 </body>
 </head>
