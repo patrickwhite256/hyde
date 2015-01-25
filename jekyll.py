@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-import hyde_core
+from hyde_django.hyde_web import hyde_core
 
 
 if len(sys.argv) != 2:
