@@ -43,7 +43,8 @@ def hyde(hidefiledata, hiddenfiledata):
     for byte in store_bytes:
         hide_image.store_next_byte(byte)
 
-    writer = png.Writer(width=hide_image.width, height=hide_image.height)
+    writer = png.Writer(width=hide_image.width, height=hide_image.height,
+            alpha=hide_image.metadata['alpha'])
 
     out = BytesIO()
     writer.write(out, hide_image.pixels)
