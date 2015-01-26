@@ -4,9 +4,12 @@ from io import BytesIO
 
 from . import png_image
 
+class HydeException(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
 def ragequit(message):
-    print(message)
-    sys.exit(0)
+    raise HydeException(message)
 
 #header format: !?! <filename length> filename <file length> !?!
 def build_header(filename, file_data):

@@ -14,17 +14,25 @@ class InputView(TemplateView):
             #TODO: what is security
             hidefile_data = request.FILES['hidefile'].read()
             hiddenfile_data = request.FILES['hiddenfile'].read()
-            out_bytes = hyde_core.hyde(
-                    (request.FILES['hidefile'].name, hidefile_data),
-                    (request.FILES['hiddenfile'].name, hiddenfile_data))
+            try:
+                out_bytes = hyde_core.hyde(
+                        (request.FILES['hidefile'].name, hidefile_data),
+                        (request.FILES['hiddenfile'].name, hiddenfile_data))
+            except hyde_core.HydeException as e:
+                self.warning = e.msg
+                return self.get(request, *args, **kwargs)
             response = HttpResponse()
             response['Content-Disposition'] = 'attachment; filename="secret.png"'
             response.write(out_bytes)
             return response
         elif 'jekfile' in request.FILES:
             file_data = request.FILES['jekfile'].read()
-            out_bytes, filename = hyde_core.jekyll(
-                    (request.FILES['jekfile'].name, file_data))
+            try:
+                out_bytes, filename = hyde_core.jekyll(
+                        (request.FILES['jekfile'].name, file_data))
+            except hyde_core.HydeException as e:
+                self.warning = e.msg
+                return self.get(request, *args, **kwargs)
             response = HttpResponse()
             response['Content-Disposition'] = 'attachment; filename="{}"'.format(
                     filename)
