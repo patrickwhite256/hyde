@@ -16,7 +16,7 @@ jekyll.py Tricoloring-secret.png
 
 ##The Django interface
 
-Now featuring a super basic web interface in Django!
+Now featuring a super basic web interface in Django! Should it have been using Flask? Absolutely. Did I know about Flask before I was 80% done the Django part? No.
 It's pretty hideous, I'd welcome anyone who wants to make it prettier. I don't really mind it, so there's that.
 
 Running the Django server:
