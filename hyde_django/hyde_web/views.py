@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from io import StringIO, BytesIO
+from io import BytesIO
 from hyde_web import hyde_core
 
 # Create your views here.
@@ -11,21 +11,24 @@ class InputView(TemplateView):
     warning = None
     def post(self, request, *args, **kwargs):
         if 'hidefile' in request.FILES and 'hiddenfile' in request.FILES:
-            outfile = StringIO()
-            hyde_core.hyde(request.FILES['hidefile'],
-                    request.FILES['hiddenfile'].name,
-                    request.FILES['hiddenfile'],
-                    outfile)
+            #TODO: what is security
+            hidefile_data = request.FILES['hidefile'].read()
+            hiddenfile_data = request.FILES['hiddenfile'].read()
+            out_bytes = hyde_core.hyde(
+                    (request.FILES['hidefile'].name, hidefile_data),
+                    (request.FILES['hiddenfile'].name, hiddenfile_data))
             response = HttpResponse()
             response['Content-Disposition'] = 'attachment; filename="secret.png"'
-            response.write(outfile.getvalue())
+            response.write(out_bytes)
             return response
         elif 'jekfile' in request.FILES:
-            outfile = BytesIO()
-            hyde_core.jekyll(request.FILES['jekfile'], outfile)
+            file_data = request.FILES['jekfile'].read()
+            out_bytes, filename = hyde_core.jekyll(
+                    (request.FILES['jekfile'].name, file_data))
             response = HttpResponse()
-            response['Content-Disposition'] = 'attachment; filename="out.txt"'
-            response.write(outfile.getvalue())
+            response['Content-Disposition'] = 'attachment; filename="{}"'.format(
+                    filename)
+            response.write(out_bytes)
             return response
         self.warning = 'Some files are missing!'
         return self.get(request, *args, **kwargs)

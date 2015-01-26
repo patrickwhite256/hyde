@@ -71,7 +71,7 @@ def jekyll(hidingfiledata):
         ragequit('This file has nothing hiding in it (that I know about...)')
 
     filename_length = read_bytes(hiding_file, 1)[0]
-    filename = read_bytes(hiding_file, filename_length)
+    filename = read_bytes(hiding_file, filename_length).decode('UTF-8')
 
     size_to_end = b''
     while size_to_end[-3:] != b'!?!':
