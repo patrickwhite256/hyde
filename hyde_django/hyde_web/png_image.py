@@ -42,6 +42,6 @@ class PngImage:
                 ((self.pixels[y][r_index + 2] & 0b11)))
 
 
-def read_from_file(file):
-    reader = png.Reader(file)
+def read_from_filedata(filebytes):
+    reader = png.Reader(bytes=filebytes)
     return PngImage(*reader.read())
